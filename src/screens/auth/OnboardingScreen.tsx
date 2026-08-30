@@ -2,7 +2,9 @@ import { useRef, useState } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
+import Discover from '@/assets/images/onboarding/discover.mp4';
 import type { AuthStackParamList } from '@/navigation/types';
 
 const { width } = Dimensions.get('window');
@@ -10,22 +12,42 @@ const { width } = Dimensions.get('window');
 const slides = [
     {
         title: 'Discover Products Anywhere',
+        video: Discover,
         description:
             'Find products from physical markets across Africa with verified, real-time local updates and trusted quality checks.',
     },
     {
         title: 'Verify Before You Buy',
+        video: Discover,
         description:
             'Connect with trusted local verification agents who physically inspect item quality, condition, and count before you release payment.',
     },
     {
         title: 'Delivered To Your Door',
+        video: Discover,
         description:
             'Enjoy integrated, stress-free consolidated shipping straight to your home or preferred PUDO center via our V-RIDE network.',
     },
 ];
 
 type NavProp = NativeStackNavigationProp<AuthStackParamList, 'Onboarding'>;
+
+function SlideVideo({ source }: { source: any }) {
+    const player = useVideoPlayer(source, (p) => {
+        p.loop = true;
+        p.muted = true;
+        p.play();
+    });
+
+    return (
+        <VideoView
+            player={player}
+            style={{ width: '100%', height: '100%', borderRadius: 16 }}
+            contentFit="cover"
+            nativeControls={false}
+        />
+    );
+}
 
 export default function OnboardingScreen() {
     const navigation = useNavigation<NavProp>();
@@ -54,10 +76,7 @@ export default function OnboardingScreen() {
     return (
         <View className="flex-1 bg-white">
             {activeIndex < slides.length - 1 && (
-                <TouchableOpacity
-                    onPress={goToLogin}
-                    className="absolute top-14 right-6 z-10"
-                >
+                <TouchableOpacity onPress={goToLogin} className="absolute top-14 right-6 z-10">
                     <Text className="text-gray-500 text-sm">Skip</Text>
                 </TouchableOpacity>
             )}
@@ -72,12 +91,10 @@ export default function OnboardingScreen() {
             >
                 {slides.map((slide, index) => (
                     <View key={index} style={{ width }} className="px-6 pt-24">
-                        <View className="w-full h-64 bg-gray-100 rounded-2xl items-center justify-center mb-8">
-                            <View className="w-10 h-10 bg-gray-300 rounded" />
+                        <View className="w-full h-64 bg-gray-100 rounded-2xl overflow-hidden mb-8">
+                            {/* <SlideVideo source={slide.video} /> */}
                         </View>
-                        <Text className="text-2xl font-bold text-center mb-3">
-                            {slide.title}
-                        </Text>
+                        <Text className="text-2xl font-bold text-center mb-3">{slide.title}</Text>
                         <Text className="text-gray-500 text-center text-sm leading-5 px-4">
                             {slide.description}
                         </Text>
@@ -96,10 +113,7 @@ export default function OnboardingScreen() {
             </View>
 
             <View className="px-6 mb-10">
-                <TouchableOpacity
-                    onPress={handleNext}
-                    className="bg-black py-4 rounded-xl items-center"
-                >
+                <TouchableOpacity onPress={handleNext} className="bg-black py-4 rounded-xl items-center">
                     <Text className="text-white font-semibold text-base">
                         {isLastSlide ? 'Get Started' : 'Next'}
                     </Text>
