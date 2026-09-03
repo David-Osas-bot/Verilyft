@@ -1,10 +1,13 @@
 import { useRef, useState } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
-import Discover from '@/assets/images/onboarding/discover.mp4';
+import Discover from '@/assets/images/onboarding/dis.jpeg';
+import Rider from '@/assets/images/onboarding/rider.jpeg';
+import Verify from '@/assets/images/onboarding/verify.jpeg';
+
 import type { AuthStackParamList } from '@/navigation/types';
 
 const { width } = Dimensions.get('window');
@@ -12,19 +15,19 @@ const { width } = Dimensions.get('window');
 const slides = [
     {
         title: 'Discover Products Anywhere',
-        video: Discover,
+        image: Discover,
         description:
             'Find products from physical markets across Africa with verified, real-time local updates and trusted quality checks.',
     },
     {
         title: 'Verify Before You Buy',
-        video: Discover,
+        image: Verify,
         description:
             'Connect with trusted local verification agents who physically inspect item quality, condition, and count before you release payment.',
     },
     {
         title: 'Delivered To Your Door',
-        video: Discover,
+        image: Rider,
         description:
             'Enjoy integrated, stress-free consolidated shipping straight to your home or preferred PUDO center via our V-RIDE network.',
     },
@@ -92,7 +95,7 @@ export default function OnboardingScreen() {
                 {slides.map((slide, index) => (
                     <View key={index} style={{ width }} className="px-6 pt-24">
                         <View className="w-full h-64 bg-gray-100 rounded-2xl overflow-hidden mb-8">
-                            {/* <SlideVideo source={slide.video} /> */}
+                            <Image source={slide.image} className="w-full h-full" />
                         </View>
                         <Text className="text-2xl font-bold text-center mb-3">{slide.title}</Text>
                         <Text className="text-gray-500 text-center text-sm leading-5 px-4">
